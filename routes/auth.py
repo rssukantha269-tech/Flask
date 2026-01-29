@@ -1,7 +1,15 @@
-from flask import Blueprint
+from flask import Blueprint, render_template, request, redirect, url_for
+from flask_login import login_user, logout_user
 
-auth_bp = Blueprint("auth", __name__)
+bp = Blueprint("auth", __name__, url_prefix="/auth")
 
-@auth_bp.route("/login")
+
+@bp.route("/login")
 def login():
     return "Login page working"
+
+
+@bp.route("/logout")
+def logout():
+    logout_user()
+    return redirect("/")
