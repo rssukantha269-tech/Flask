@@ -1,7 +1,8 @@
 from flask import Blueprint
 
-booking_bp = Blueprint("booking", __name__)
+bp = Blueprint("booking", __name__, url_prefix="/booking")
 
-@booking_bp.route("/book")
-def book():
+
+@bp.route("/")
+def booking_home():
     return "Booking page working"
