@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Equipment List{% endblock %}
+
+{% block content %}
+<h2>Available Equipment</h2>
+<div class="row">
+    {% for equipment in equipments %}
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ equipment.name }}</h5>
+                <p class="card-text">{{ equipment.description or 'No description available' }}</p>
+                <p class="card-text">
+                    <small class="text-muted">
+                        Status: {% if equipment.available %}Available{% else %}Unavailable{% endif %}
+                    </small>
+                </p>
+                {% if equipment.available %}
+                <a href="{{ url_for('booking.book', equipment_id=equipment._id) }}" class="btn btn-primary">Book Now</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
