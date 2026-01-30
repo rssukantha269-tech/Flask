@@ -4,9 +4,10 @@
 
 {% block content %}
 <h2>My Bookings</h2>
-{% if bookings %}
-<table class="table">
-    <thead>
+
+{% if bookings and bookings|length > 0 %}
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
         <tr>
             <th>Equipment</th>
             <th>Start Time</th>
@@ -14,18 +15,38 @@
             <th>Status</th>
         </tr>
     </thead>
+
     <tbody>
         {% for booking in bookings %}
         <tr>
-            <td>{{ booking.equipment.name }}</td>
-            <td>{{ booking.start_time.strftime('%Y-%m-%d %H:%M') }}</td>
-            <td>{{ booking.end_time.strftime('%Y-%m-%d %H:%M') }}</td>
-            <td>{{ booking.status.title() }}</td>
+            <td>
+                {{ booking.equipment.name if booking.equipment else "N/A" }}
+            </td>
+
+            <td>
+                {{ booking.start_time.strftime('%Y-%m-%d %H:%M')
+                   if booking.start_time else "N/A" }}
+            </td>
+
+            <td>
+                {{ booking.end_time.strftime('%Y-%m-%d %H:%M')
+                   if booking.end_time else "N/A" }}
+            </td>
+
+            <td>
+                <span class="badge bg-info text-dark">
+                    {{ booking.status.title() if booking.status else "Pending" }}
+                </span>
+            </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+
 {% else %}
-<p>You have no bookings yet.</p>
+<div class="alert alert-info">
+    You have no bookings yet.
+</div>
 {% endif %}
+
 {% endblock %}
