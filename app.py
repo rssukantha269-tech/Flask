@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 from flask_login import LoginManager
 from flask_pymongo import PyMongo
-from config import Config
+from config import Config   # ✅ works when app.py is root file
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -44,18 +44,14 @@ class User:
 @login_manager.user_loader
 def load_user(user_id):
     from bson.objectid import ObjectId
-
-    user_data = mongo.db.users.find_one(
-        {"_id": ObjectId(user_id)}
-    )
-
+    user_data = mongo.db.users.find_one({"_id": ObjectId(user_id)})
     if user_data:
         return User(user_data)
     return None
 
 
 # -------------------------------
-# Blueprints
+# Blueprints (IMPORTANT FIX)
 # -------------------------------
 from routes.auth import bp as auth_bp
 from routes.booking import bp as booking_bp
@@ -76,4 +72,4 @@ def index():
 # Run app
 # -------------------------------
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
