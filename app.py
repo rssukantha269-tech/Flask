@@ -13,32 +13,40 @@ login_manager.init_app(app)
 login_manager.login_view = "auth.login"
 
 
-# ---------------- USER MODEL ----------------
 class User:
-    def __init__(self, user):
-        self.id = str(user["_id"])
-        self.username = user["username"]
-        self.email = user["email"]
+    def __init__(self, user_data):
+        self.id = str(user_data["_id"])
+        self.username = user_data["username"]
+        self.email = user_data["email"]
+        self.password = user_data["password"]
 
     def get_id(self):
         return self.id
 
     @property
-    def is_authenticated(self): return True
+    def is_authenticated(self):
+        return True
+
     @property
-    def is_active(self): return True
+    def is_active(self):
+        return True
+
     @property
-    def is_anonymous(self): return False
+    def is_anonymous(self):
+        return False
 
 
 @login_manager.user_loader
 def load_user(user_id):
     from bson.objectid import ObjectId
+
     user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
-    return User(user) if user else None
+    if user:
+        return User(user)
+    return None
 
 
-# ---------------- BLUEPRINTS ----------------
+# -------- Blueprints --------
 from routes.auth import bp as auth_bp
 from routes.booking import bp as booking_bp
 
@@ -46,11 +54,10 @@ app.register_blueprint(auth_bp)
 app.register_blueprint(booking_bp)
 
 
-# ---------------- HOME ----------------
 @app.route("/")
 def index():
     return render_template("index.html")
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
