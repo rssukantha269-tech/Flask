@@ -8,3 +8,8 @@ bp = Blueprint("booking", __name__, url_prefix="/booking")
 @login_required
 def booking_home():
     return render_template("booking.html")
+
+@bp.route("/my-bookings")
+@login_required
+def my_bookings():
+    return render_template("my_bookings.html")
