@@ -3,6 +3,11 @@ from flask import Blueprint, render_template
 bp = Blueprint("booking", __name__, url_prefix="/booking")
 
 
+@bp.route("/")
+def booking_home():
+    return render_template("booking/equipment.html")
+
+
 @bp.route("/equipment")
 def equipment():
     return render_template("booking/equipment.html")
